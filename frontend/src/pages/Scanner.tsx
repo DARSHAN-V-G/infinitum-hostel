@@ -218,6 +218,7 @@ const Scanner: React.FC = () => {
               if (pausedRef.current) {
                 addDebugLog('Scanner is paused - ignoring scan');
                 toast('Scanner paused. Wait for desk to clear.', { icon: '⏸️' });
+                stopScanner();
                 return;
               }
               
@@ -276,17 +277,21 @@ const Scanner: React.FC = () => {
     }
   };
 
-  const stopScanner = async () => {
-    if (scannerRef.current) {
-      try {
-        await scannerRef.current.stop();
-        scannerRef.current.clear();
-      } catch (error) {
-        console.error('Error stopping scanner:', error);
-      }
+const stopScanner = async () => {
+  if (scannerRef.current) {
+    try {
+      addDebugLog('Stopping scanner...');
+      await scannerRef.current.stop();
+      scannerRef.current.clear();
+    } catch (error) {
+      console.error('Error stopping scanner:', error);
+    } finally {
+      scannerRef.current = null; // 🔥 THIS IS THE KEY FIX
     }
-    setScanning(false);
-  };
+  }
+  setScanning(false);
+};
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 p-4">
