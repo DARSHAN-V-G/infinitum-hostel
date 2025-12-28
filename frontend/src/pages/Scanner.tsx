@@ -12,7 +12,7 @@ const Scanner: React.FC = () => {
   const [lastScanned, setLastScanned] = useState<string | null>(null);
   const [debugLogs, setDebugLogs] = useState<string[]>([]);
   const [manualInput, setManualInput] = useState('');
-  
+
   const socketRef = useRef<Socket | null>(null);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const connectedRef = useRef(false);
@@ -107,15 +107,15 @@ const Scanner: React.FC = () => {
       addDebugLog('Scanner already running');
       return;
     }
-    
+
     try {
       addDebugLog('Checking camera permissions...');
-      
+
       // Check if camera permission is granted
       if (navigator.permissions) {
         const permission = await navigator.permissions.query({ name: 'camera' as PermissionName });
         addDebugLog(`Camera permission status: ${permission.state}`);
-        
+
         if (permission.state === 'denied') {
           toast.error('Camera permission denied. Please allow camera access.');
           return;
@@ -135,14 +135,14 @@ const Scanner: React.FC = () => {
         },
         (decodedText) => {
           addDebugLog(`QR Code detected: ${decodedText}`);
-          
+
           // Check if scanner is paused
           if (pausedRef.current) {
             addDebugLog('Scanner is paused - ignoring scan');
-            toast('Scanner paused. Wait for desk to clear.', { icon: '⏸️' });
+            //toast('Scanner paused. Wait for desk to clear.', { icon: '⏸️' });
             return;
           }
-          
+
           try {
             // Try to parse as JSON first (new format)
             const parsedData = JSON.parse(decodedText);
@@ -197,14 +197,14 @@ const Scanner: React.FC = () => {
       addDebugLog(`Error starting scanner: ${error.message}`);
       console.error('Error starting scanner:', error);
       toast.error(`Failed to start camera: ${error.message || 'Unknown error'}`);
-      
+
       // Try with front camera as fallback
       if (error.message?.includes('environment')) {
         addDebugLog('Trying with front camera...');
         try {
           const html5QrCode = new Html5Qrcode('qr-reader');
           scannerRef.current = html5QrCode;
-          
+
           await html5QrCode.start(
             { facingMode: 'user' }, // Use front camera
             {
@@ -213,7 +213,7 @@ const Scanner: React.FC = () => {
             },
             (decodedText) => {
               addDebugLog(`QR Code detected (front camera): ${decodedText}`);
-              
+
               // Check if scanner is paused
               if (pausedRef.current) {
                 addDebugLog('Scanner is paused - ignoring scan');
@@ -221,7 +221,7 @@ const Scanner: React.FC = () => {
                 stopScanner();
                 return;
               }
-              
+
               try {
                 // Try to parse as JSON first (new format)
                 const parsedData = JSON.parse(decodedText);
@@ -265,7 +265,7 @@ const Scanner: React.FC = () => {
               addDebugLog(`QR scan error (front camera): ${errorMessage}`);
             }
           );
-          
+
           setScanning(true);
           toast.success('Camera started with front camera');
         } catch (fallbackError: any) {
@@ -277,27 +277,36 @@ const Scanner: React.FC = () => {
     }
   };
 
-const stopScanner = async () => {
-  if (scannerRef.current) {
-    try {
-      addDebugLog('Stopping scanner...');
-      await scannerRef.current.stop();
-      scannerRef.current.clear();
-    } catch (error) {
-      console.error('Error stopping scanner:', error);
-    } finally {
-      scannerRef.current = null; // 🔥 THIS IS THE KEY FIX
+  const stopScanner = async () => {
+    if (scannerRef.current) {
+      try {
+        addDebugLog('Stopping scanner...');
+        await scannerRef.current.stop();
+        scannerRef.current.clear();
+      } catch (error) {
+        console.error('Error stopping scanner:', error);
+      } finally {
+        scannerRef.current = null; // 🔥 THIS IS THE KEY FIX
+      }
     }
-  }
-  setScanning(false);
-};
+    setScanning(false);
+  };
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-black p-4 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute w-96 h-96 -top-48 -left-48 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute w-96 h-96 -bottom-48 -right-48 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      </div>
+
+      {/* Grid overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none"></div>
+
       <Toaster position="top-center" />
-      
-      <div className="max-w-md mx-auto">
+
+      <div className="max-w-md mx-auto relative z-10">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-4">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Participant Scanner</h1>
@@ -322,7 +331,7 @@ const stopScanner = async () => {
             <p className="text-gray-700 font-medium">Scan Participant QR Code</p>
             <p className="text-sm text-gray-500 mt-1">Point camera at the QR code on the participant's profile</p>
           </div>
-          
+
           <div id="qr-reader" className="rounded-lg overflow-hidden"></div>
 
           {!scanning && (
@@ -388,7 +397,7 @@ const stopScanner = async () => {
                 onClick={() => {
                   if (manualInput.trim() && socketRef.current && connectedRef.current) {
                     addDebugLog(`Manual input: ${manualInput}`);
-                    
+
                     try {
                       // Try to parse as JSON first
                       const parsedData = JSON.parse(manualInput.trim());
@@ -403,7 +412,7 @@ const stopScanner = async () => {
                       // Fallback to plain text
                       socketRef.current.emit('scan-participant', { uniqueId: manualInput.trim() });
                     }
-                    
+
                     setManualInput('');
                   }
                 }}

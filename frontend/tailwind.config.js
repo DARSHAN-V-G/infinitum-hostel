@@ -34,6 +34,20 @@ export default {
           900: '#111827',
           950: '#030712',
         },
+        // Theme primary colors (purple/pink gradient)
+        'theme': {
+          'purple-primary': '#9333ea',    // purple-600
+          'purple-light': '#d8b4fe',      // purple-300  
+          'purple-dark': '#581c87',       // purple-900
+          'pink-primary': '#eb1bba72',      // pink-500
+          'pink-light': '#f9a8d4',        // pink-300
+          'pink-dark': '#831843',         // pink-900
+        },
+        // Background colors
+        'theme-bg': {
+          'primary': '#111827',           // gray-900
+          'secondary': '#1f2937',         // gray-800
+        },
       },
     },
   },

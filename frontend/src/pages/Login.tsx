@@ -33,11 +33,11 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-[rgba(67,2,105,0.3)] to-gray-900 flex relative overflow-hidden tomorrow-regular">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-black flex relative overflow-hidden tomorrow-regular">
       {/* Animated background elements */}
       <LightPillar
-        topColor="#430269"
-        bottomColor="#F21961"
+        topColor="#9333ea"
+        bottomColor="#ec4899"
         intensity={0.9}
         rotationSpeed={0.7}
         interactive={true}
@@ -48,20 +48,20 @@ const Login: React.FC = () => {
         mixBlendMode="screen"
         className="opacity-70"
       />
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute w-96 h-96 -top-48 -left-48 bg-[rgba(67,2,105,0.15)] rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute w-96 h-96 -bottom-48 -right-48 bg-[rgba(242,25,97,0.15)] rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
-        <div className="absolute w-64 h-64 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[rgba(67,2,105,0.1)] rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute w-96 h-96 -top-48 -left-48 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute w-96 h-96 -bottom-48 -right-48 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute w-64 h-64 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-purple-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
       {/* Grid overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(67,2,105,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(67,2,105,0.05)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none"></div>
 
       {/* Logo */}
       <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-10">
-        <img 
-          src="/src/assets/infinitumLogo.png" 
-          alt="Infinitum Logo" 
+        <img
+          src="/src/assets/infinitumLogo.png"
+          alt="Infinitum Logo"
           className="h-24 w-auto"
         />
       </div>
@@ -69,17 +69,17 @@ const Login: React.FC = () => {
       {/* Center - Login Form */}
       <div className="w-full flex items-center justify-center px-6 py-12 relative z-10">
         <div className="w-full max-w-md">
-          <h2 className="text-center text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#f0e6ff] via-[#ff6b9d] to-[#8b5cf6] mb-8 tomorrow-bold">
+          <h2 className="text-center text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-300 to-purple-400 mb-8 tomorrow-bold">
             Hostel Portal
           </h2>
 
 
           <div className="relative group">
             {/* Glow effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[rgba(67,2,105,0.2)] to-[rgba(242,25,97,0.2)] rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition duration-300"></div>
-            
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition duration-300"></div>
+
             {/* Main card */}
-            <div className="relative bg-gray-900/60 backdrop-blur-xl py-6 px-6 shadow-2xl rounded-2xl border border-[rgba(67,2,105,0.3)]">
+            <div className="relative bg-gray-900/60 backdrop-blur-xl py-6 px-6 shadow-2xl rounded-2xl border border-purple-500/30">
               <form className="space-y-5" onSubmit={handleSubmit}>
                 <div>
                   <label htmlFor="username" className="block text-sm font-medium text-white mb-2">
@@ -99,7 +99,7 @@ const Login: React.FC = () => {
                       required
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      className="appearance-none block w-full pl-10 pr-3 py-3 border border-[rgba(67,2,105,0.4)] rounded-xl placeholder-gray-500 bg-gray-800/50 text-white focus:outline-none focus:ring-2 focus:ring-[#430269] focus:border-transparent sm:text-sm transition-all duration-200 hover:border-[rgba(67,2,105,0.6)]"
+                      className="appearance-none block w-full pl-10 pr-3 py-3 border border-purple-500/30 rounded-xl placeholder-gray-500 bg-gray-800/50 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent sm:text-sm transition-all duration-200 hover:border-purple-500/50"
                       placeholder="Enter your username"
                     />
                   </div>
@@ -123,7 +123,7 @@ const Login: React.FC = () => {
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="appearance-none block w-full pl-10 pr-10 py-3 border border-[rgba(67,2,105,0.4)] rounded-xl placeholder-gray-500 bg-gray-800/50 text-white focus:outline-none focus:ring-2 focus:ring-[#430269] focus:border-transparent sm:text-sm transition-all duration-200 hover:border-[rgba(67,2,105,0.6)]"
+                      className="appearance-none block w-full pl-10 pr-10 py-3 border border-purple-500/30 rounded-xl placeholder-gray-500 bg-gray-800/50 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent sm:text-sm transition-all duration-200 hover:border-purple-500/50"
                       placeholder="Enter your password"
                     />
                     <button
@@ -158,8 +158,8 @@ const Login: React.FC = () => {
                     disabled={isLoading}
                     className="relative w-full group overflow-hidden rounded-xl"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#430269] to-[#F21961] transition-all duration-300 group-hover:scale-105"></div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#5c0388] to-[#ff2a72] opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 transition-all duration-300 group-hover:scale-105"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur"></div>
                     <div className="relative flex justify-center items-center py-3 px-4 text-sm font-semibold text-white transition-all duration-200">
                       {isLoading ? (
                         <div className="flex items-center">

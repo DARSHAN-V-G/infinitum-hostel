@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from './AuthContext';
-
 interface SidebarProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
@@ -35,9 +34,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
       )}
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-900/90 backdrop-blur-xl shadow-2xl shadow-purple-900/20 border-r border-purple-500/20 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 tomorrow-regular ${
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-br from-gray-900 via-[rgba(67,2,105,0.3)] to-gray-900 flex relative overflow-hidden tomorrow-regular ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
-      }`}>
+      } transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}>
         <div className="flex flex-col h-full relative">
           {/* Animated background glow */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
