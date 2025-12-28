@@ -105,11 +105,30 @@ const Scanner: React.FC = () => {
         },
         (decodedText) => {
           addDebugLog(`QR Code detected: ${decodedText}`);
-          // Send scanned unique ID to backend
-          if (socketRef.current && connected) {
-            socketRef.current.emit('scan-participant', { uniqueId: decodedText });
-          } else {
-            addDebugLog('Socket not connected or not ready');
+          
+          try {
+            // Try to parse as JSON first (new format)
+            const parsedData = JSON.parse(decodedText);
+            if (parsedData.type === 'PARTICIPANT' && parsedData.uniqueId) {
+              addDebugLog(`Parsed participant QR: ${parsedData.uniqueId}`);
+              // Send scanned unique ID to backend
+              if (socketRef.current && connected) {
+                socketRef.current.emit('scan-participant', { uniqueId: parsedData.uniqueId });
+              } else {
+                addDebugLog('Socket not connected or not ready');
+              }
+            } else {
+              addDebugLog('Invalid QR code format - missing type or uniqueId');
+              toast.error('Invalid QR code format');
+            }
+          } catch (error) {
+            // Fallback to plain text (old format)
+            addDebugLog(`Treating as plain text: ${decodedText}`);
+            if (socketRef.current && connected) {
+              socketRef.current.emit('scan-participant', { uniqueId: decodedText });
+            } else {
+              addDebugLog('Socket not connected or not ready');
+            }
           }
         },
         (errorMessage) => {
@@ -141,8 +160,25 @@ const Scanner: React.FC = () => {
             },
             (decodedText) => {
               addDebugLog(`QR Code detected (front camera): ${decodedText}`);
-              if (socketRef.current && connected) {
-                socketRef.current.emit('scan-participant', { uniqueId: decodedText });
+              
+              try {
+                // Try to parse as JSON first (new format)
+                const parsedData = JSON.parse(decodedText);
+                if (parsedData.type === 'PARTICIPANT' && parsedData.uniqueId) {
+                  addDebugLog(`Parsed participant QR (front camera): ${parsedData.uniqueId}`);
+                  if (socketRef.current && connected) {
+                    socketRef.current.emit('scan-participant', { uniqueId: parsedData.uniqueId });
+                  }
+                } else {
+                  addDebugLog('Invalid QR code format - missing type or uniqueId');
+                  toast.error('Invalid QR code format');
+                }
+              } catch (error) {
+                // Fallback to plain text (old format)
+                addDebugLog(`Treating as plain text (front camera): ${decodedText}`);
+                if (socketRef.current && connected) {
+                  socketRef.current.emit('scan-participant', { uniqueId: decodedText });
+                }
               }
             },
             (errorMessage) => {
@@ -253,14 +289,29 @@ const Scanner: React.FC = () => {
                 type="text"
                 value={manualInput}
                 onChange={(e) => setManualInput(e.target.value)}
-                placeholder="Enter unique ID manually"
+                placeholder="Enter unique ID or JSON data manually"
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
               />
               <button
                 onClick={() => {
                   if (manualInput.trim() && socketRef.current && connected) {
                     addDebugLog(`Manual input: ${manualInput}`);
-                    socketRef.current.emit('scan-participant', { uniqueId: manualInput.trim() });
+                    
+                    try {
+                      // Try to parse as JSON first
+                      const parsedData = JSON.parse(manualInput.trim());
+                      if (parsedData.type === 'PARTICIPANT' && parsedData.uniqueId) {
+                        socketRef.current.emit('scan-participant', { uniqueId: parsedData.uniqueId });
+                      } else {
+                        addDebugLog('Invalid JSON format for manual input');
+                        toast.error('Invalid JSON format');
+                        return;
+                      }
+                    } catch (error) {
+                      // Fallback to plain text
+                      socketRef.current.emit('scan-participant', { uniqueId: manualInput.trim() });
+                    }
+                    
                     setManualInput('');
                   }
                 }}
@@ -282,6 +333,9 @@ const Scanner: React.FC = () => {
             <li>Wait for confirmation before next scan</li>
             <li>Details will appear on the desk display</li>
           </ol>
+          <p className="text-xs text-gray-600 mt-2">
+            Supports both JSON format: <code className="bg-gray-100 px-1 rounded">{"{type: \"PARTICIPANT\", uniqueId: \"...\"}"}</code> and plain text unique IDs
+          </p>
           {window.location.protocol !== 'https:' && window.location.hostname !== 'localhost' && (
             <p className="text-red-600 text-xs mt-2 font-medium">
               ⚠️ Camera access requires HTTPS. Use a secure connection for best results.
