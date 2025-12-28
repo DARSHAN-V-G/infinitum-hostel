@@ -161,6 +161,7 @@ const Scanner: React.FC = () => {
               socketRef.current.emit('scan-participant', {
                 uniqueId: parsedData.uniqueId
               });
+              stopScanner();
             } else {
               addDebugLog('Invalid QR code format - missing type or uniqueId');
               toast.error('Invalid QR code format');
@@ -180,11 +181,12 @@ const Scanner: React.FC = () => {
             socketRef.current.emit('scan-participant', {
               uniqueId: decodedText.trim()
             });
+            stopScanner();
           }
         },
         (errorMessage) => {
           // Log scanning errors for debugging
-          addDebugLog(`QR scan error: ${errorMessage}`);
+          //addDebugLog(`QR scan error: ${errorMessage}`);
         }
       );
 
