@@ -8,6 +8,7 @@ const Scanner: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [connected, setConnected] = useState(false);
   const [scanning, setScanning] = useState(false);
+  const [paused, setPaused] = useState(false);
   const [lastScanned, setLastScanned] = useState<string | null>(null);
   const [debugLogs, setDebugLogs] = useState<string[]>([]);
   const [manualInput, setManualInput] = useState('');
@@ -62,6 +63,17 @@ const Scanner: React.FC = () => {
       addDebugLog(`Scan acknowledged: ${uniqueId}`);
       setLastScanned(uniqueId);
       toast.success(`Scanned: ${uniqueId}`);
+      // Pause scanning after successful scan
+      setPaused(true);
+      addDebugLog('Scanner paused - waiting for desk to clear');
+      toast('Waiting for desk to clear...', { icon: '⏸️', duration: 3000 });
+    });
+
+    // Listen for resume scanning signal from desk
+    socket.on('resume-scanning', () => {
+      addDebugLog('Resume scanning signal received');
+      setPaused(false);
+      toast.success('Ready to scan next participant');
     });
 
     // Handle errors
@@ -105,6 +117,13 @@ const Scanner: React.FC = () => {
         },
         (decodedText) => {
           addDebugLog(`QR Code detected: ${decodedText}`);
+          
+          // Check if scanner is paused
+          if (paused) {
+            addDebugLog('Scanner is paused - ignoring scan');
+            toast('Scanner paused. Wait for desk to clear.', { icon: '⏸️' });
+            return;
+          }
           
           try {
             // Try to parse as JSON first (new format)
@@ -160,6 +179,13 @@ const Scanner: React.FC = () => {
             },
             (decodedText) => {
               addDebugLog(`QR Code detected (front camera): ${decodedText}`);
+              
+              // Check if scanner is paused
+              if (paused) {
+                addDebugLog('Scanner is paused - ignoring scan');
+                toast('Scanner paused. Wait for desk to clear.', { icon: '⏸️' });
+                return;
+              }
               
               try {
                 // Try to parse as JSON first (new format)
@@ -271,7 +297,14 @@ const Scanner: React.FC = () => {
 
           {scanning && (
             <div className="mt-4 text-center">
-              <p className="text-sm text-gray-600">Scanner active - point at QR code</p>
+              {paused ? (
+                <div className="space-y-2">
+                  <p className="text-sm text-orange-600 font-semibold">⏸️ Scanner Paused</p>
+                  <p className="text-xs text-gray-600">Waiting for desk to clear before next scan</p>
+                </div>
+              ) : (
+                <p className="text-sm text-gray-600">Scanner active - point at QR code</p>
+              )}
               <button
                 onClick={stopScanner}
                 className="mt-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"

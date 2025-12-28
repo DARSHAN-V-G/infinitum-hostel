@@ -493,6 +493,30 @@ const AccommodationDetails: React.FC = () => {
                   numInputs={4}
                 />
               </div>
+              {uniqueIdValue && (
+                <button
+                  onClick={() => {
+                    setUniqueIdValue('');
+                    setAccommodationData(null);
+                    setRoomData(null);
+                    // Signal scanner to resume
+                    if (socketRef.current && scannerMode) {
+                      socketRef.current.emit('resume-scanning');
+                      toast.success('Ready for next scan');
+                    }
+                  }}
+                  className="relative px-6 py-3 overflow-hidden rounded-xl text-white font-medium transition-all duration-200 flex items-center group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-700 transition-all duration-300 group-hover:scale-105"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-red-700 to-red-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur"></div>
+                  <div className="relative flex items-center space-x-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    <span>Clear & Scan Next</span>
+                  </div>
+                </button>
+              )}
               {loading && (
                 <div className="flex items-center space-x-2 text-purple-400">
                   <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">

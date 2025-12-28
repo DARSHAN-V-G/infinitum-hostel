@@ -7,12 +7,13 @@ import AccommodationDetails from './pages/AccommodationDetails'
 import AllAccommodations from './pages/AllAccommodations'
 import Scanner from './pages/Scanner'
 import ProtectedRoute from './components/ProtectedRoute'
-
+import Test from './pages/Test'
 function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/scanner" element={<Scanner />} />
+      <Route path="/test" element={<Test />} />
       <Route
         path="/home"
         element={

@@ -141,6 +141,30 @@ export const initializeSocket = (httpServer: HTTPServer) => {
       console.log(`Forwarded scan to desk ${deskId}`);
     });
 
+    // Handle resume scanning signal from desk
+    socket.on('resume-scanning', () => {
+      const deskId = socket.data.deskId;
+      const role = socket.data.role;
+
+      console.log(`Resume scanning request from ${role} in desk ${deskId}`);
+
+      if (role !== 'desk') {
+        socket.emit('error', { message: 'Only desk can resume scanning' });
+        return;
+      }
+
+      const room = deskRooms.get(deskId);
+      if (!room || !room.scannerClient) {
+        socket.emit('error', { message: 'Scanner not connected' });
+        return;
+      }
+
+      // Forward to scanner client
+      room.scannerClient.emit('resume-scanning');
+      
+      console.log(`Forwarded resume-scanning signal to scanner in desk ${deskId}`);
+    });
+
     // Handle disconnection
     socket.on('disconnect', () => {
       const deskId = socket.data.deskId;
