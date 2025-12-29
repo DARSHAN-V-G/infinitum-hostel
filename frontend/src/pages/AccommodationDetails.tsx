@@ -248,7 +248,7 @@ const AccommodationDetails: React.FC = () => {
       setScannerMode(true);
 
       // Connect to socket
-      const socket = io(import.meta.env.VITE_API_BASE?.replace('/api/acc', '') || `${window.location.protocol}//${window.location.hostname}:3000`, { path: '/api/acc' });
+      const socket = io(import.meta.env.VITE_API_BASE?.replace('/api/acc', '') || `${window.location.protocol}//${window.location.hostname}:3000`, { path: '/api/accommodationsocket' });
       socketRef.current = socket;
 
       // Join desk session

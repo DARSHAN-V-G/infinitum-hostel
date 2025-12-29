@@ -21,7 +21,7 @@ export const initializeSocket = (httpServer: HTTPServer) => {
         // Allow localhost and local network IPs
         const allowedOrigins = [
           'http://localhost:5173',
-          `${process.env.FRONTEND_URL} || http://127.0.0.1:5173`,
+          ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
           'https://infinitum-hostel.vercel.app',
           /^http:\/\/192\.168\.\d+\.\d+:5173$/, // 192.168.x.x:5173
           /^http:\/\/10\.\d+\.\d+\.\d+:5173$/,   // 10.x.x.x:5173
@@ -45,7 +45,7 @@ export const initializeSocket = (httpServer: HTTPServer) => {
       methods: ['GET', 'POST'],
       credentials: true
     },
-    path: '/api/acc'
+    path: '/api/accommodationsocket'
   });
 
   io.on('connection', (socket: Socket) => {
