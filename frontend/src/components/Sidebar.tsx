@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from './AuthContext';
+import infinitumLogo from '../assets/infinitumLogo.png';
 interface SidebarProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
@@ -49,7 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
             <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-pink-600/10 blur-xl"></div>
             <div className="flex items-center space-x-2 relative z-10">
               <img 
-                src="/src/assets/infinitumLogo.png" 
+                src={infinitumLogo}
                 alt="Infinitum Logo" 
                 className="h-16 w-auto"
               />

@@ -1,6 +1,13 @@
-FROM node:18 as build
+FROM node:20-alpine
 
 WORKDIR /app
+
+# Copy package files first for better caching
+COPY package*.json ./
+RUN npm install
+
+# Copy source code
+COPY . .
 
 ARG VITE_USERNAME
 ARG VITE_PASSWORD
@@ -10,23 +17,8 @@ ENV VITE_USERNAME=$VITE_USERNAME
 ENV VITE_PASSWORD=$VITE_PASSWORD
 ENV VITE_API_BASE=$VITE_API_BASE
 
-COPY package*.json ./
-
-RUN npm install
-
-COPY . .
-
 RUN npm run build
 
-FROM node:18
+EXPOSE 5173
 
-WORKDIR /app
-
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/package*.json ./
-
-RUN npm install
-
-EXPOSE 4173
-
-CMD ["npm", "run", "preview"]
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

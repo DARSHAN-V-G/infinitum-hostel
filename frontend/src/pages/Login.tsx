@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
 import LightPillar from '../components/LightPillar';
-
+import infinitumLogo from '../assets/infinitumLogo.png'
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -60,7 +60,7 @@ const Login: React.FC = () => {
       {/* Logo */}
       <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-10">
         <img
-          src="/src/assets/infinitumLogo.png"
+          src={infinitumLogo}
           alt="Infinitum Logo"
           className="h-24 w-auto"
         />
