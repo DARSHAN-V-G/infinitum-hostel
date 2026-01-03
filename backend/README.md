@@ -232,7 +232,6 @@
 - **Request Body**:
   ```json
   {
-    "user_id": "string (required)",
     "name": "string (required)",
     "email": "string (required, valid email)",
     "uniqueId": "string (required)",
