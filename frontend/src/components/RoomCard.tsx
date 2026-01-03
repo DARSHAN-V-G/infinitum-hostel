@@ -27,7 +27,7 @@ interface RoomCardProps {
 
 const RoomCard: React.FC<RoomCardProps> = ({ rooms, onEdit }) => {
 
-  const [expandedRoom, setExpandedRoom] = useState(null);
+  const [expandedRoom, setExpandedRoom] = useState<string | null>(null);
 
   const handleEdit = (roomId: string) => {
     if (onEdit) {
@@ -137,7 +137,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ rooms, onEdit }) => {
                 </div>
 
                 <div className={`grid gap-3 ${
-                  expandedRoom === room.id 
+                  expandedRoom === room._id 
                     ? 'grid-cols-1 lg:grid-cols-2' 
                     : 'grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
                 }`}>
@@ -146,7 +146,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ rooms, onEdit }) => {
                       key={idx}
                       className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-3 border border-purple-500/20 hover:border-pink-500/50 transition-all duration-300 hover:scale-105"
                     >
-                      {expandedRoom === room.id ? (
+                      {expandedRoom === room._id ? (
                         // Expanded View
                         <div className="space-y-3">
                           <div className="flex items-start gap-3">
