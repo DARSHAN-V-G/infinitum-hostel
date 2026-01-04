@@ -32,7 +32,7 @@ app.use(cors({
     
     // Allow localhost and local network IPs
     const allowedOrigins = [
-      'http://localhost:4000',
+      'http://localhost:5173',
       ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
       'https://infinitum-hostel.vercel.app',
       /^http:\/\/192\.168\.\d+\.\d+:5173$/, // 192.168.x.x:5173
