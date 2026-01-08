@@ -1,5 +1,5 @@
 // API configuration and utility functions
-const API_BASE = `${import.meta.env.VITE_API_BASE}/api/acc` || 'http://localhost:3000/api/acc';
+const API_BASE = `${import.meta.env.VITE_API_BASE}/inf/api/acc` || 'http://localhost:3000/inf/api/acc';
 
 // Generic fetch wrapper with error handling
 const apiRequest = async (endpoint: string, options: RequestInit = {}) => {

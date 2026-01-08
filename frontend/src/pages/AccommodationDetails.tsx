@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-hot-toast';
-import { accommodationAPI, roomAPI, deskAPI } from '../api';
-import { io, Socket } from 'socket.io-client';
+import { accommodationAPI, roomAPI} from '../api';
 import { QRCodeSVG } from 'qrcode.react';
+import { useScanner } from "./ScannerContext";
+
 
 // Custom OTP Input Component
 const OtpInput: React.FC<{
@@ -84,6 +85,8 @@ interface Room {
 }
 
 const AccommodationDetails: React.FC = () => {
+  
+
   const [activeTab, setActiveTab] = useState<'uniqueId' | 'email'>('uniqueId');
   const [uniqueIdValue, setUniqueIdValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
@@ -112,11 +115,7 @@ const AccommodationDetails: React.FC = () => {
   const [roomSearchTerm, setRoomSearchTerm] = useState('');
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
 
-  // Scanner mode state
-  const [scannerMode, setScannerMode] = useState(false);
-  const [deskSession, setDeskSession] = useState<{ deskId: string; signature: string } | null>(null);
-  const [scannerConnected, setScannerConnected] = useState(false);
-  const socketRef = useRef<Socket | null>(null);
+  
 
   // Fetch accommodation by unique ID
   const fetchByUniqueId = async (uniqueId: string) => {
@@ -237,80 +236,8 @@ const AccommodationDetails: React.FC = () => {
     }
   };
 
-  // Enable scanner mode
-  const enableScannerMode = async () => {
-    try {
-      // Create desk session
-      const response = await deskAPI.createSession();
-      const { deskId, signature } = response.data;
 
-      setDeskSession({ deskId, signature });
-      setScannerMode(true);
-
-      // Connect to socket
-      const socket = io(import.meta.env.VITE_API_BASE?.replace('/api/acc', '') || `${window.location.protocol}//${window.location.hostname}:3000`, { path: '/api/accommodationsocket' });
-      socketRef.current = socket;
-
-      // Join desk session
-      socket.emit('join-desk', { deskId, signature });
-
-      // Listen for desk joined confirmation
-      socket.on('desk-joined', () => {
-        toast.success('Scanner mode enabled');
-      });
-
-      // Listen for scanner connection
-      socket.on('scanner-connected', () => {
-        setScannerConnected(true);
-        toast.success('Mobile scanner connected');
-      });
-
-      // Listen for scanner disconnection
-      socket.on('scanner-disconnected', () => {
-        setScannerConnected(false);
-        toast('Mobile scanner disconnected', { icon: '⚠️' });
-      });
-
-      // Listen for scanned participant IDs
-      socket.on('participant-scanned', ({ uniqueId }: { uniqueId: string }) => {
-        // Extract 4-digit ID from full unique ID (e.g., "INF1234" -> "1234")
-        const fourDigit = uniqueId.replace('INF', '');
-        setUniqueIdValue(fourDigit);
-        toast.success(`Scanned: ${uniqueId}`);
-      });
-
-      // Handle errors
-      socket.on('error', ({ message }: { message: string }) => {
-        toast.error(message);
-      });
-
-    } catch (error: any) {
-      console.error('Error enabling scanner mode:', error);
-      toast.error('Failed to enable scanner mode');
-    }
-  };
-
-  // Disable scanner mode
-  const disableScannerMode = () => {
-    if (socketRef.current) {
-      socketRef.current.disconnect();
-      socketRef.current = null;
-    }
-    setScannerMode(false);
-    setDeskSession(null);
-    setScannerConnected(false);
-    toast.success('Scanner mode disabled');
-  };
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-      }
-    };
-  }, []);
-
+  const { scannerMode, deskSession, scannerConnected, socket, enableScannerMode, disableScannerMode } = useScanner();
   // Auto-fetch when unique ID is complete
   useEffect(() => {
     if (uniqueIdValue.length === 4 && activeTab === 'uniqueId') {
@@ -473,8 +400,8 @@ const AccommodationDetails: React.FC = () => {
                     setAccommodationData(null);
                     setRoomData(null);
                     // Signal scanner to resume
-                    if (socketRef.current && scannerMode) {
-                      socketRef.current.emit('resume-scanning');
+                    if (socket && scannerMode) {
+                      socket.emit('resume-scanning');
                       toast.success('Ready for next scan');
                     }
                   }}
