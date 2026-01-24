@@ -15,7 +15,6 @@ interface Member {
 interface Room {
   _id: string;
   RoomName: string;
-  roomtype: string;
   gender: string;
   Capacity: number;
   members: Member[];
@@ -31,7 +30,6 @@ const AddRooms: React.FC = () => {
   const [editingRoom, setEditingRoom] = useState<Room | null>(null);
   const [formData, setFormData] = useState({
     RoomName: '',
-    roomtype: 'single',
     gender: 'mixed' as 'male' | 'female' | 'mixed',
     Capacity: 1
   });
@@ -65,14 +63,13 @@ const AddRooms: React.FC = () => {
     try {
       await roomAPI.createRoom({
         RoomName: formData.RoomName.trim(),
-        roomtype: formData.roomtype,
         gender: formData.gender,
         Capacity: formData.Capacity
       });
 
       toast.success('Room created successfully');
       setIsAddModalOpen(false);
-      setFormData({ RoomName: '', roomtype: 'single', gender: 'mixed', Capacity: 1 });
+      setFormData({ RoomName: '', gender: 'mixed', Capacity: 1 });
       fetchRooms();
     } catch (error: any) {
       console.error('Error creating room:', error);
@@ -99,7 +96,6 @@ const AddRooms: React.FC = () => {
     try {
       await roomAPI.updateRoom(editingRoom._id, {
         RoomName: formData.RoomName.trim(),
-        roomtype: formData.roomtype,
         gender: formData.gender,
         Capacity: formData.Capacity
       });
@@ -107,7 +103,7 @@ const AddRooms: React.FC = () => {
       toast.success('Room updated successfully');
       setIsEditModalOpen(false);
       setEditingRoom(null);
-      setFormData({ RoomName: '', roomtype: 'single', gender: 'mixed', Capacity: 1 });
+      setFormData({ RoomName: '', gender: 'mixed', Capacity: 1 });
       fetchRooms();
     } catch (error: any) {
       console.error('Error updating room:', error);
@@ -145,7 +141,6 @@ const AddRooms: React.FC = () => {
     setEditingRoom(room);
     setFormData({
       RoomName: room.RoomName,
-      roomtype: room.roomtype,
       gender: room.gender as 'male' | 'female' | 'mixed',
       Capacity: room.Capacity
     });
@@ -156,7 +151,7 @@ const AddRooms: React.FC = () => {
     setIsAddModalOpen(false);
     setIsEditModalOpen(false);
     setEditingRoom(null);
-    setFormData({ RoomName: '', roomtype: 'single', gender: 'mixed', Capacity: 1 });
+    setFormData({ RoomName: '', gender: 'mixed', Capacity: 1 });
   };
 
   useEffect(() => {
@@ -233,7 +228,7 @@ const AddRooms: React.FC = () => {
                 <div className="flex justify-between items-start relative z-10">
                   <div>
                     <h3 className="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-pink-200">{room.RoomName}</h3>
-                    <p className="text-purple-300 text-sm">Type: {room.roomtype.charAt(0).toUpperCase() + room.roomtype.slice(1)} | Gender: {room.gender.charAt(0).toUpperCase() + room.gender.slice(1)}</p>
+                    <p className="text-purple-300 text-sm">Gender: {room.gender.charAt(0).toUpperCase() + room.gender.slice(1)}</p>
                     <p className="text-purple-300 text-sm">Capacity: {room.Capacity}</p>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -319,19 +314,6 @@ const AddRooms: React.FC = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-400 mb-1">
-                    Room Type
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.roomtype}
-                    onChange={(e) => setFormData({ ...formData, roomtype: e.target.value })}
-                    className="w-full px-3 py-2 border border-purple-500/30 rounded-lg bg-gray-800/50 backdrop-blur-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
-                    placeholder="Enter room type (e.g., single, double, dormitory)"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">
                     Gender
                   </label>
                   <select
@@ -402,19 +384,6 @@ const AddRooms: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, RoomName: e.target.value })}
                     className="w-full px-3 py-2 border border-purple-500/30 rounded-lg bg-gray-800/50 backdrop-blur-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                     placeholder="Enter room name"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">
-                    Room Type
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.roomtype}
-                    onChange={(e) => setFormData({ ...formData, roomtype: e.target.value })}
-                    className="w-full px-3 py-2 border border-purple-500/30 rounded-lg bg-gray-800/50 backdrop-blur-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
-                    placeholder="Enter room type (e.g., single, double, dormitory)"
                   />
                 </div>
 

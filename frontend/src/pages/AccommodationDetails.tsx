@@ -62,11 +62,6 @@ interface Accommodation {
   city: string;
   phone: string;
   gender: string;
-  breakfast1: boolean;
-  breakfast2: boolean;
-  dinner1: boolean;
-  dinner2: boolean;
-  amenities: string;
   amount: number;
   payment: boolean;
   vacated: boolean;
@@ -540,61 +535,12 @@ const AccommodationDetails: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Meal Preferences */}
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#f0e6ff] to-[#ff6b9d] border-b border-[rgba(67,2,105,0.3)] pb-2">
-                      Meal Preferences
-                    </h3>
-                    <div className="space-y-3">
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          checked={accommodationData.accommodation.breakfast1}
-                          readOnly
-                          className="rounded border-purple-500/30 text-purple-500 focus:ring-purple-500"
-                        />
-                        <label className="text-sm text-gray-300">Breakfast (Day 1)</label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          checked={accommodationData.accommodation.breakfast2}
-                          readOnly
-                          className="rounded border-purple-500/30 text-purple-500 focus:ring-purple-500"
-                        />
-                        <label className="text-sm text-gray-300">Breakfast (Day 2)</label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          checked={accommodationData.accommodation.dinner1}
-                          readOnly
-                          className="rounded border-purple-500/30 text-purple-500 focus:ring-purple-500"
-                        />
-                        <label className="text-sm text-gray-300">Dinner (Day 1)</label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          checked={accommodationData.accommodation.dinner2}
-                          readOnly
-                          className="rounded border-purple-500/30 text-purple-500 focus:ring-purple-500"
-                        />
-                        <label className="text-sm text-gray-300">Dinner (Day 2)</label>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Amenities & Status */}
+                  {/* Status Section */}
                   <div className="space-y-4">
                     <h3 className="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300 border-b border-purple-500/20 pb-2">
-                      Amenities & Status
+                      Status
                     </h3>
                     <div className="space-y-3">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-400">Amenities</label>
-                        <p className="text-white">{accommodationData.accommodation.amenities}</p>
-                      </div>
                       <div className="flex items-center space-x-2">
                         <input
                           type="checkbox"

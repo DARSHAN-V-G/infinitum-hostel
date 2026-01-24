@@ -14,7 +14,6 @@ interface Member {
 interface Room {
   _id: string;
   RoomName: string;
-  roomtype: string;
   gender: string;
   Capacity: number;
   members: Member[];
@@ -67,9 +66,6 @@ const RoomCard: React.FC<RoomCardProps> = ({ rooms, onEdit }) => {
                     <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 mb-2">
                       {room.RoomName}
                     </h2>
-                    <span className="inline-block px-3 py-1 text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/50 rounded-full">
-                      {room.roomtype}
-                    </span>
                   </div>
                   
                   {/* Edit Button */}

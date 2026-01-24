@@ -12,11 +12,6 @@ interface Accommodation {
   city: string;
   phone: string;
   gender: string;
-  breakfast1: boolean;
-  breakfast2: boolean;
-  dinner1: boolean;
-  dinner2: boolean;
-  amenities: string;
   amount: number;
   payment: boolean;
   vacated: boolean;
@@ -24,7 +19,6 @@ interface Accommodation {
   room: {
     _id: string;
     RoomName: string;
-    roomtype: string;
     gender: string;
     Capacity: number;
     currentOccupancy: number;
@@ -297,10 +291,6 @@ const AllAccommodations: React.FC = () => {
                         <p className="text-gray-300">{selectedAccommodation.room.RoomName}</p>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-500">Room Type</label>
-                        <p className="text-gray-300">{selectedAccommodation.room.roomtype.charAt(0).toUpperCase() + selectedAccommodation.room.roomtype.slice(1)}</p>
-                      </div>
-                      <div>
                         <label className="block text-sm font-medium text-gray-500">Gender</label>
                         <p className="text-gray-300">{selectedAccommodation.room.gender.charAt(0).toUpperCase() + selectedAccommodation.room.gender.slice(1)}</p>
                       </div>
@@ -316,39 +306,6 @@ const AllAccommodations: React.FC = () => {
                   ) : (
                     <p className="text-gray-500 italic">No room allocated</p>
                   )}
-                </div>
-
-                {/* Meal Preferences */}
-                <div>
-                  <h3 className="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300 mb-3 border-b border-purple-500/20 pb-2">
-                    Meal Preferences
-                  </h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <div className={`p-3 rounded-lg text-center border ${selectedAccommodation.breakfast1 ? 'bg-green-500/20 border-green-500/30' : 'bg-gray-800/50 border-purple-500/20'}`}>
-                      <p className="text-sm font-medium text-gray-300">Breakfast Day 1</p>
-                      <p className="text-xs text-gray-400">{selectedAccommodation.breakfast1 ? 'Yes' : 'No'}</p>
-                    </div>
-                    <div className={`p-3 rounded-lg text-center border ${selectedAccommodation.breakfast2 ? 'bg-green-500/20 border-green-500/30' : 'bg-gray-800/50 border-purple-500/20'}`}>
-                      <p className="text-sm font-medium text-gray-300">Breakfast Day 2</p>
-                      <p className="text-xs text-gray-400">{selectedAccommodation.breakfast2 ? 'Yes' : 'No'}</p>
-                    </div>
-                    <div className={`p-3 rounded-lg text-center border ${selectedAccommodation.dinner1 ? 'bg-green-500/20 border-green-500/30' : 'bg-gray-800/50 border-purple-500/20'}`}>
-                      <p className="text-sm font-medium text-gray-300">Dinner Day 1</p>
-                      <p className="text-xs text-gray-400">{selectedAccommodation.dinner1 ? 'Yes' : 'No'}</p>
-                    </div>
-                    <div className={`p-3 rounded-lg text-center border ${selectedAccommodation.dinner2 ? 'bg-green-500/20 border-green-500/30' : 'bg-gray-800/50 border-purple-500/20'}`}>
-                      <p className="text-sm font-medium text-gray-300">Dinner Day 2</p>
-                      <p className="text-xs text-gray-400">{selectedAccommodation.dinner2 ? 'Yes' : 'No'}</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Amenities */}
-                <div>
-                  <h3 className="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300 mb-3 border-b border-purple-500/20 pb-2">
-                    Amenities
-                  </h3>
-                  <p className="text-gray-300">{selectedAccommodation.amenities || 'None'}</p>
                 </div>
 
                 {/* Additional Status */}

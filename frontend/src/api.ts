@@ -36,7 +36,7 @@ export const roomAPI = {
   },
 
   // Create a new room
-  createRoom: async (roomData: { RoomName: string; roomtype: string; gender: string; Capacity: number }) => {
+  createRoom: async (roomData: { RoomName: string; gender: string; Capacity: number }) => {
     return apiRequest('/rooms/', {
       method: 'POST',
       body: JSON.stringify(roomData),
@@ -44,7 +44,7 @@ export const roomAPI = {
   },
 
   // Update a room
-  updateRoom: async (roomId: string, roomData: { RoomName?: string; roomtype?: string; gender?: string; Capacity?: number }) => {
+  updateRoom: async (roomId: string, roomData: { RoomName?: string; gender?: string; Capacity?: number }) => {
     return apiRequest(`/rooms/${roomId}`, {
       method: 'PUT',
       body: JSON.stringify(roomData),

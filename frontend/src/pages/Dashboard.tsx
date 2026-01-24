@@ -7,19 +7,6 @@ interface StatsData {
     maleStats: number;
     femaleStats: number;
   };
-  mealStats: {
-    breakfast: {
-      breakfast1: Array<{ _id: string; count: number }>;
-      breakfast2: Array<{ _id: string; count: number }>;
-    };
-    dinner: {
-      dinner1: Array<{ _id: string; count: number }>;
-      dinner2: Array<{ _id: string; count: number }>;
-    };
-  };
-  amenitiesStats: {
-    amenities: Array<{ _id: string; count: number }>;
-  };
   totalRooms: number;
 }
 
@@ -54,21 +41,6 @@ const Dashboard: React.FC = () => {
         <div className="text-purple-500/50 group-hover:text-pink-500/70 transition-all duration-300">
           {icon}
         </div>
-      </div>
-    </div>
-  );
-
-  const MealStatsCard: React.FC<{ title: string; data: Array<{ _id: string; count: number }> }> = ({ title, data }) => (
-    <div className="bg-gray-900/90 backdrop-blur-xl p-6 rounded-xl shadow-2xl border border-purple-500/20 hover:border-pink-500/50 transition-all duration-300 group relative">
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-600/5 to-pink-600/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-      <h3 className="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300 mb-4 relative z-10">{title}</h3>
-      <div className="space-y-3 relative z-10">
-        {data.map((item) => (
-          <div key={item._id} className="flex justify-between items-center">
-            <span className="text-gray-400 capitalize">{item._id}</span>
-            <span className="font-semibold text-purple-300">{item.count}</span>
-          </div>
-        ))}
       </div>
     </div>
   );
@@ -164,25 +136,6 @@ const Dashboard: React.FC = () => {
             }
             color="hover:shadow-2xl hover:shadow-pink-500/20 transition-all duration-300"
           />
-        </div>
-
-        {/* Meal Statistics */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-300 to-purple-400 mb-4">Meal Statistics</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <MealStatsCard title="Breakfast Day 1" data={stats.mealStats.breakfast.breakfast1} />
-            <MealStatsCard title="Breakfast Day 2" data={stats.mealStats.breakfast.breakfast2} />
-            <MealStatsCard title="Dinner Day 1" data={stats.mealStats.dinner.dinner1} />
-            <MealStatsCard title="Dinner Day 2" data={stats.mealStats.dinner.dinner2} />
-          </div>
-        </div>
-
-        {/* Amenities Statistics */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-300 to-purple-400 mb-4">Amenities Statistics</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <MealStatsCard title="Amenities by Gender" data={stats.amenitiesStats.amenities} />
-          </div>
         </div>
       </div>
     </div>
