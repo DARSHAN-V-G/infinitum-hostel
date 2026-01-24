@@ -29,9 +29,8 @@ const Scanner: React.FC = () => {
 
     setStatusMessage('Connecting to desk...');
 
-    
     const socket = io(import.meta.env.VITE_API_BASE?.replace('inf/api/acc', '') || `${window.location.protocol}//${window.location.hostname}:3000`, { path: '/api/accommodationsocket' });
-    socketRef.current = socket;
+    socketRef.current = socket; 
 
     socket.emit('join-scanner', { deskId, signature });
 
